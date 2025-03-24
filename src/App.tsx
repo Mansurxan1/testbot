@@ -7,7 +7,6 @@ import AppRouter from "./router/AppRouter";
 const App = () => {
   const dispatch = useDispatch();
   const theme = useSelector((state: RootState) => state.telegram.theme);
-
   useEffect(() => {
     const checkTelegram = () => {
       try {
@@ -15,14 +14,6 @@ const App = () => {
           const webApp = window.Telegram.WebApp;
           webApp.ready();
           webApp.expand();
-
-          // Fullscreen rejimini so‘rash
-          if (webApp.requestFullscreen.isAvailable()) {
-            webApp.requestFullscreen();
-          }
-
-          // Header rangini o‘zgartirish
-          webApp.setHeaderColor(theme === "dark" ? "transparent" : "transparent");
 
           const user = (webApp as any).initDataUnsafe?.user || {};
           dispatch(
@@ -55,7 +46,7 @@ const App = () => {
     } else {
       checkTelegram();
     }
-  }, [dispatch, theme]);
+  }, [dispatch]);
 
   return (
     <div
