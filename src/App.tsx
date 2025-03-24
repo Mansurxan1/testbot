@@ -24,21 +24,21 @@ const App = () => {
           }
 
           const user = webApp.initDataUnsafe?.user || {};
-          const telegramTheme = webApp.colorScheme === "dark" ? "dark" : "light";
+          const telegramTheme = webApp.colorScheme; // "dark" yoki "light" sifatida qoldiramiz
 
           dispatch(
             setUserData({
               firstName: user.first_name || "Noma'lum",
               lastName: user.last_name || "",
               photoUrl: user.photo_url || null,
-              theme: telegramTheme,
+              theme: telegramTheme, // Telegramning colorScheme ni bevosita ishlatamiz
               telegramId: user.id?.toString() || "",
               username: user.username || "",
             })
           );
 
           webApp.onEvent("themeChanged", () => {
-            const newTheme = webApp.colorScheme === "dark" ? "dark" : "light";
+            const newTheme = webApp.colorScheme; // Yangi tema Telegramdan olinadi
             dispatch(
               setUserData({
                 firstName: user.first_name || "Noma'lum",
@@ -69,7 +69,7 @@ const App = () => {
     }
   }, [dispatch]);
 
-  // Consistent theme application
+  // Telegramning colorScheme ga asoslangan tema sinflari
   const themeClasses =
     theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black";
 
