@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserData, toggleTheme } from "./store/telegramSlice";
+import { setUserData } from "./store/telegramSlice";
 import { RootState } from "./store/store";
 import AppRouter from "./router/AppRouter";
 
