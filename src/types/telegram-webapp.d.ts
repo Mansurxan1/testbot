@@ -19,6 +19,7 @@ interface TelegramWebApp {
       last_name?: string;
       photo_url?: string;
       id?: number;
+      username?: string;
     };
   };
 }

@@ -24,17 +24,17 @@ const App = () => {
             webApp.setHeaderColor("#00000000"); // Transparent header
           }
 
-          const user = (webApp as any).initDataUnsafe?.user || {};
-          // Telegram Web Appning dastlabki temasini olish
-          const initialTheme = webApp.colorScheme === "dark" ? "dark" : "light";
+          const user = webApp.initDataUnsafe?.user || {};
+          // Telegramning joriy temasini olish
+          const telegramTheme = webApp.colorScheme === "dark" ? "dark" : "light";
 
-          // Redux store’ga foydalanuvchi ma'lumotlari va dastlabki temani yuborish
+          // Redux store’ga ma'lumotlarni yuborish
           dispatch(
             setUserData({
               firstName: user.first_name || "Noma'lum",
               lastName: user.last_name || "",
               photoUrl: user.photo_url || null,
-              theme: initialTheme, // Telegramdan kelgan dastlabki tema
+              theme: telegramTheme, // Telegramning temasiga qat'iy rioya qilish
               telegramId: user.id?.toString() || "",
               username: user.username || "",
             })
@@ -43,11 +43,20 @@ const App = () => {
           // Tema o‘zgarishi uchun event
           webApp.onEvent("themeChanged", () => {
             const newTheme = webApp.colorScheme === "dark" ? "dark" : "light";
-            dispatch(setUserData({ ...user, theme: newTheme })); // Temani yangilash
+            dispatch(
+              setUserData({
+                firstName: user.first_name || "Noma'lum",
+                lastName: user.last_name || "",
+                photoUrl: user.photo_url || null,
+                theme: newTheme, // Yangi tema Telegramdan olinadi
+                telegramId: user.id?.toString() || "",
+                username: user.username || "",
+              })
+            );
           });
 
           // Tekshirish uchun log
-          console.log("Dastlabki tema:", initialTheme);
+          console.log("Telegramning joriy temasi:", telegramTheme);
         } else {
           console.error("Telegram WebApp yuklanmadi");
         }

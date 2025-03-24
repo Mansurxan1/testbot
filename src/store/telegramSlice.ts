@@ -13,7 +13,7 @@ const initialState: TelegramUser = {
   firstName: "",
   lastName: "",
   photoUrl: null,
-  theme: "light",
+  theme: "light", // Dastlabki qiymat sifatida light
   telegramId: "",
   username: "",
 };
@@ -26,15 +26,12 @@ const telegramSlice = createSlice({
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
       state.photoUrl = action.payload.photoUrl;
-      state.theme = action.payload.theme;
+      state.theme = action.payload.theme; // Faqat Telegramdan kelgan tema ishlatiladi
       state.telegramId = action.payload.telegramId;
       state.username = action.payload.username || "";
-    },
-    toggleTheme: (state) => {
-      state.theme = state.theme === "light" ? "dark" : "light";
     },
   },
 });
 
-export const { setUserData, toggleTheme } = telegramSlice.actions;
+export const { setUserData } = telegramSlice.actions;
 export default telegramSlice.reducer;
