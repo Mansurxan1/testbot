@@ -54,7 +54,7 @@ const initialState: TelegramUser = {
   firstName: "",
   lastName: "",
   photoUrl: null,
-  theme: "light", // Dastlabki qiymat
+  theme: "light",
   telegramId: "",
   username: "",
 };
