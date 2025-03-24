@@ -6,7 +6,6 @@ export default {
     extend: {
       fontFamily: {
         inter: ["Inter"],
-        manrope: ["Manrope"],
       },
     },
   },

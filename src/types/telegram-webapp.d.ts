@@ -12,6 +12,7 @@ interface TelegramWebApp {
   } & (() => void);
   openMainMenu: () => void;
   enableClosingConfirmation: () => void;
+  isVersionAtLeast: (version: string) => boolean;
   initDataUnsafe?: {
     user?: {
       first_name?: string;

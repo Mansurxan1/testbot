@@ -16,15 +16,16 @@ const App = () => {
           webApp.ready();
           webApp.expand();
 
-          // 📌 **Telegram header'ini shaffof qilish**
-          webApp.setHeaderColor("transparent");
-
-          // 📌 **Fullscreen rejimni yoqish**
-          if (webApp.requestFullscreen.isAvailable()) {
+          // Fullscreen rejimini yoqish
+          if (webApp.isVersionAtLeast("8.0")) {
             webApp.requestFullscreen();
           }
 
-          // 📌 **Foydalanuvchi ma'lumotlarini olish**
+          // Header rangini shaffof yoki to'liq ekran uchun moslashtirish
+          if (webApp.isVersionAtLeast("7.0")) {
+            webApp.setHeaderColor("#00000000"); // Transparent header uchun #00000000 (RGBA)
+          }
+
           const user = (webApp as any).initDataUnsafe?.user || {};
           dispatch(
             setUserData({
@@ -36,9 +37,19 @@ const App = () => {
             })
           );
 
-          // 📌 **Tun/Kun rejimi o‘zgarishi**
+          // Fullscreen holatini tekshirish
+          if (webApp.isFullscreen) {
+            console.log("Mini App fullscreen rejimida ochildi");
+          }
+
+          // Tema o'zgarishi uchun event
           webApp.onEvent("themeChanged", () => {
             dispatch(toggleTheme());
+          });
+
+          // Fullscreen o'zgarishi uchun event (agar kerak bo'lsa)
+          webApp.onEvent("fullscreenChanged", () => {
+            console.log("Fullscreen holati:", webApp.isFullscreen);
           });
         } else {
           console.error("Telegram WebApp yuklanmadi");
@@ -57,16 +68,13 @@ const App = () => {
     } else {
       checkTelegram();
     }
-  }, [dispatch, theme]);
+  }, [dispatch]);
 
   return (
     <div
-      className={`min-h-screen max-w-[450px] mx-auto flex items-center justify-center relative bg-cover bg-center transition-all ${
-        theme === "dark" ? "bg-black text-white" : "bg-white text-black"
+      className={`min-h-screen max-w-[450px] mx-auto ${
+        theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black"
       }`}
-      style={{
-        backgroundImage: `url('/path/to/your/image.png')`,
-      }}
     >
       <AppRouter />
     </div>
