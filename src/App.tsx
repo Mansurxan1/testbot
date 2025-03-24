@@ -16,14 +16,15 @@ const App = () => {
           webApp.ready();
           webApp.expand();
 
-          // Headerni shaffof qilish (yo‘qotish)
+          // 📌 **Telegram header'ini shaffof qilish**
           webApp.setHeaderColor("transparent");
 
-          // Fullscreen rejimni yoqish
+          // 📌 **Fullscreen rejimni yoqish**
           if (webApp.requestFullscreen.isAvailable()) {
             webApp.requestFullscreen();
           }
 
+          // 📌 **Foydalanuvchi ma'lumotlarini olish**
           const user = (webApp as any).initDataUnsafe?.user || {};
           dispatch(
             setUserData({
@@ -35,6 +36,7 @@ const App = () => {
             })
           );
 
+          // 📌 **Tun/Kun rejimi o‘zgarishi**
           webApp.onEvent("themeChanged", () => {
             dispatch(toggleTheme());
           });
