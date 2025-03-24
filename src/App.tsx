@@ -105,18 +105,18 @@ const App = () => {
             webApp.requestFullscreen();
           }
           if (webApp.isVersionAtLeast("7.0")) {
-            webApp.setHeaderColor("#00000000"); // Transparent header
+            webApp.setHeaderColor("#00000000"); // Shaffof header
           }
 
           const user = webApp.initDataUnsafe?.user || {};
-          const telegramTheme = webApp.colorScheme; // "dark" yoki "light"
+          const telegramTheme = webApp.colorScheme; // Telegramdan kelgan tema
 
           dispatch(
             setUserData({
               firstName: user.first_name || "Noma'lum",
               lastName: user.last_name || "",
               photoUrl: user.photo_url || null,
-              theme: telegramTheme, // To‘g‘ridan-to‘g‘ri Telegramning colorScheme ishlatiladi
+              theme: telegramTheme, // Telegramning colorScheme qiymati
               telegramId: user.id?.toString() || "",
               username: user.username || "",
             })
@@ -124,21 +124,18 @@ const App = () => {
 
           // Tema o‘zgarishi hodisasi
           webApp.onEvent("themeChanged", () => {
-            const newTheme = webApp.colorScheme; // Yangi tema Telegramdan olinadi
+            const newTheme = webApp.colorScheme;
             dispatch(
               setUserData({
                 firstName: user.first_name || "Noma'lum",
                 lastName: user.last_name || "",
                 photoUrl: user.photo_url || null,
-                theme: newTheme,
+                theme: newTheme, // Yangi tema Telegramdan olinadi
                 telegramId: user.id?.toString() || "",
                 username: user.username || "",
               })
             );
-            console.log("Tema o‘zgardi:", newTheme); // Tekshirish uchun log
           });
-
-          console.log("Dastlabki tema:", telegramTheme); // Tekshirish uchun log
         } else {
           console.error("Telegram WebApp yuklanmadi");
         }
@@ -152,15 +149,15 @@ const App = () => {
       script.src = "https://telegram.org/js/telegram-web-app.js";
       script.async = true;
       script.onload = checkTelegram;
+      script.onerror = () => console.error("Telegram skripti yuklanmadi");
       document.head.appendChild(script);
     } else {
       checkTelegram();
     }
   }, [dispatch]);
 
-  // Telegramning colorScheme ga asoslangan tema sinflari
-  const themeClasses =
-    theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black";
+  // Telegramning colorScheme’ga asoslangan tema sinflari
+  const themeClasses = theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black";
 
   return (
     <div className={`min-h-screen max-w-[450px] mx-auto ${themeClasses}`}>
