@@ -6,7 +6,7 @@ interface TelegramUser {
   photoUrl: string | null;
   theme: "light" | "dark";
   telegramId: string;
-  username?: string; 
+  username?: string;
 }
 
 const initialState: TelegramUser = {
@@ -15,7 +15,7 @@ const initialState: TelegramUser = {
   photoUrl: null,
   theme: "light",
   telegramId: "",
-  username: "", 
+  username: "",
 };
 
 const telegramSlice = createSlice({
@@ -28,10 +28,10 @@ const telegramSlice = createSlice({
       state.photoUrl = action.payload.photoUrl;
       state.theme = action.payload.theme;
       state.telegramId = action.payload.telegramId;
-      state.username = action.payload.username || ""; 
+      state.username = action.payload.username || "";
     },
     toggleTheme: (state) => {
-      state.theme = state.theme === "light" ? "dark" : "light"; 
+      state.theme = state.theme === "light" ? "dark" : "light";
     },
   },
 });

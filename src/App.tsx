@@ -16,41 +16,38 @@ const App = () => {
           webApp.ready();
           webApp.expand();
 
-          // Fullscreen rejimini yoqish
+          // Fullscreen rejimi
           if (webApp.isVersionAtLeast("8.0")) {
             webApp.requestFullscreen();
           }
-
-          // Header rangini shaffof yoki to'liq ekran uchun moslashtirish
           if (webApp.isVersionAtLeast("7.0")) {
-            webApp.setHeaderColor("#00000000"); // Transparent header uchun #00000000 (RGBA)
+            webApp.setHeaderColor("#00000000"); // Transparent header
           }
 
           const user = (webApp as any).initDataUnsafe?.user || {};
+          // Telegram Web Appning dastlabki temasini olish
+          const initialTheme = webApp.colorScheme === "dark" ? "dark" : "light";
+
+          // Redux store’ga foydalanuvchi ma'lumotlari va dastlabki temani yuborish
           dispatch(
             setUserData({
               firstName: user.first_name || "Noma'lum",
               lastName: user.last_name || "",
               photoUrl: user.photo_url || null,
-              theme: webApp.colorScheme === "dark" ? "dark" : "light",
+              theme: initialTheme, // Telegramdan kelgan dastlabki tema
               telegramId: user.id?.toString() || "",
+              username: user.username || "",
             })
           );
 
-          // Fullscreen holatini tekshirish
-          if (webApp.isFullscreen) {
-            console.log("Mini App fullscreen rejimida ochildi");
-          }
-
-          // Tema o'zgarishi uchun event
+          // Tema o‘zgarishi uchun event
           webApp.onEvent("themeChanged", () => {
-            dispatch(toggleTheme());
+            const newTheme = webApp.colorScheme === "dark" ? "dark" : "light";
+            dispatch(setUserData({ ...user, theme: newTheme })); // Temani yangilash
           });
 
-          // Fullscreen o'zgarishi uchun event (agar kerak bo'lsa)
-          webApp.onEvent("fullscreenChanged", () => {
-            console.log("Fullscreen holati:", webApp.isFullscreen);
-          });
+          // Tekshirish uchun log
+          console.log("Dastlabki tema:", initialTheme);
         } else {
           console.error("Telegram WebApp yuklanmadi");
         }
