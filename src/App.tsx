@@ -7,6 +7,7 @@ import AppRouter from "./router/AppRouter";
 const App = () => {
   const dispatch = useDispatch();
   const theme = useSelector((state: RootState) => state.telegram.theme);
+
   useEffect(() => {
     const checkTelegram = () => {
       try {
@@ -14,6 +15,14 @@ const App = () => {
           const webApp = window.Telegram.WebApp;
           webApp.ready();
           webApp.expand();
+
+          // Headerni shaffof qilish (yo‘qotish)
+          webApp.setHeaderColor("transparent");
+
+          // Fullscreen rejimni yoqish
+          if (webApp.requestFullscreen.isAvailable()) {
+            webApp.requestFullscreen();
+          }
 
           const user = (webApp as any).initDataUnsafe?.user || {};
           dispatch(
@@ -46,13 +55,16 @@ const App = () => {
     } else {
       checkTelegram();
     }
-  }, [dispatch]);
+  }, [dispatch, theme]);
 
   return (
     <div
-      className={`min-h-screen max-w-[450px] mx-auto ${
-        theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black"
+      className={`min-h-screen max-w-[450px] mx-auto flex items-center justify-center relative bg-cover bg-center transition-all ${
+        theme === "dark" ? "bg-black text-white" : "bg-white text-black"
       }`}
+      style={{
+        backgroundImage: `url('/path/to/your/image.png')`,
+      }}
     >
       <AppRouter />
     </div>
