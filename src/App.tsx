@@ -82,7 +82,8 @@
 
 // export default App;
 
-import { useEffect, useState } from "react";
+
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserData } from "./store/telegramSlice";
 import { RootState } from "./store/store";
@@ -91,22 +92,8 @@ import AppRouter from "./router/AppRouter";
 const App = () => {
   const dispatch = useDispatch();
   const theme = useSelector((state: RootState) => state.telegram.theme);
-  const [isMobile, setIsMobile] = useState(true); // Ekran o‘lchamini tekshirish uchun holat
 
   useEffect(() => {
-    // Ekran o‘lchamini tekshirish va faqat mobilda ishlashini ta'minlash
-    const checkScreenSize = () => {
-      const screenWidth = window.innerWidth;
-      setIsMobile(screenWidth <= 450); // Agar ekran kengligi 450px dan kichik yoki teng bo‘lsa, true
-    };
-
-    // Dastlabki tekshirish
-    checkScreenSize();
-
-    // Ekran o‘lchami o‘zgarganda tekshirish
-    window.addEventListener("resize", checkScreenSize);
-
-    // Telegram WebApp ni tekshirish
     const checkTelegram = () => {
       try {
         if (window.Telegram?.WebApp) {
@@ -129,7 +116,7 @@ const App = () => {
               firstName: user.first_name || "Noma'lum",
               lastName: user.last_name || "",
               photoUrl: user.photo_url || null,
-              theme: telegramTheme,
+              theme: telegramTheme, // To‘g‘ridan-to‘g‘ri Telegramning colorScheme ishlatiladi
               telegramId: user.id?.toString() || "",
               username: user.username || "",
             })
@@ -137,7 +124,7 @@ const App = () => {
 
           // Tema o‘zgarishi hodisasi
           webApp.onEvent("themeChanged", () => {
-            const newTheme = webApp.colorScheme;
+            const newTheme = webApp.colorScheme; // Yangi tema Telegramdan olinadi
             dispatch(
               setUserData({
                 firstName: user.first_name || "Noma'lum",
@@ -148,10 +135,10 @@ const App = () => {
                 username: user.username || "",
               })
             );
-            console.log("Tema o‘zgardi:", newTheme); // Tekshirish uchun
+            console.log("Tema o‘zgardi:", newTheme); // Tekshirish uchun log
           });
 
-          console.log("Dastlabki tema:", telegramTheme); // Tekshirish uchun
+          console.log("Dastlabki tema:", telegramTheme); // Tekshirish uchun log
         } else {
           console.error("Telegram WebApp yuklanmadi");
         }
@@ -169,28 +156,14 @@ const App = () => {
     } else {
       checkTelegram();
     }
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("resize", checkScreenSize);
-    };
   }, [dispatch]);
 
-  // Agar ekran kengligi 450px dan katta bo‘lsa, ilova ishlamaydi
-  if (!isMobile) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-200 text-black">
-        <p>Bu ilova faqat mobil qurilmalarda ishlaydi (maksimum kenglik 450px).</p>
-      </div>
-    );
-  }
-
-  // Tema sinflari
+  // Telegramning colorScheme ga asoslangan tema sinflari
   const themeClasses =
     theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black";
 
   return (
-    <div className={`min-h-screen w-full ${themeClasses}`}>
+    <div className={`min-h-screen max-w-[450px] mx-auto ${themeClasses}`}>
       <AppRouter />
     </div>
   );
