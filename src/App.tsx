@@ -22,7 +22,7 @@ const App = () => {
           }
 
           // Header rangini o‘zgartirish
-          webApp.setHeaderColor(theme === "dark" ? "#1a1a1a" : "#ffffff");
+          webApp.setHeaderColor(theme === "dark" ? "transparent" : "transparent");
 
           const user = (webApp as any).initDataUnsafe?.user || {};
           dispatch(
