@@ -6,16 +6,16 @@ interface TelegramUser {
   photoUrl: string | null;
   theme: "light" | "dark";
   telegramId: string;
-  username?: string;
+  username?: string; 
 }
 
 const initialState: TelegramUser = {
   firstName: "",
   lastName: "",
   photoUrl: null,
-  theme: "light", // Dastlabki qiymat sifatida light
+  theme: "light",
   telegramId: "",
-  username: "",
+  username: "", 
 };
 
 const telegramSlice = createSlice({
@@ -26,12 +26,15 @@ const telegramSlice = createSlice({
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
       state.photoUrl = action.payload.photoUrl;
-      state.theme = action.payload.theme; // Faqat Telegramdan kelgan tema ishlatiladi
+      state.theme = action.payload.theme;
       state.telegramId = action.payload.telegramId;
-      state.username = action.payload.username || "";
+      state.username = action.payload.username || ""; 
+    },
+    toggleTheme: (state) => {
+      state.theme = state.theme === "light" ? "dark" : "light"; 
     },
   },
 });
 
-export const { setUserData } = telegramSlice.actions;
+export const { setUserData, toggleTheme } = telegramSlice.actions;
 export default telegramSlice.reducer;
