@@ -9,19 +9,18 @@ const Profile = () => {
   );
 
   const handleBack = () => {
-    navigate(-1); 
+    navigate(-1);
   };
 
+  // Fixed theme logic: dark = gray-900/white, light = white/black
+  const themeClasses = theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black";
+
   return (
-    <div
-      className={`flex flex-col items-center justify-center h-screen ${
-        theme === "light" ? "bg-gray-900 text-white" : "bg-white text-black"
-      }`}
-    >
+    <div className={`flex flex-col items-center justify-center h-screen ${themeClasses}`}>
       <button
         onClick={handleBack}
         className={`absolute top-4 left-4 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
-          theme === "light"
+          theme === "dark"
             ? "bg-gray-800 hover:bg-gray-700 text-white"
             : "bg-blue-500 hover:bg-blue-600 text-white"
         }`}
@@ -31,7 +30,7 @@ const Profile = () => {
 
       <h1
         className={`text-2xl font-bold mb-4 ${
-          theme === "light" ? "text-blue-400" : "text-blue-600"
+          theme === "dark" ? "text-blue-400" : "text-blue-600"
         }`}
       >
         Xush kelibsiz, {firstName} {lastName}
@@ -45,16 +44,14 @@ const Profile = () => {
       ) : (
         <div
           className={`w-32 h-32 rounded-full mb-4 flex items-center justify-center ${
-            theme === "light"
-              ? "bg-gray-700 text-gray-400"
-              : "bg-gray-200 text-gray-600"
+            theme === "dark" ? "bg-gray-700 text-gray-400" : "bg-gray-200 text-gray-600"
           }`}
         >
           Rasm yo‘q
         </div>
       )}
       <p className="mb-2">Telegram ID: {telegramId}</p>
-      <p className="mb-2">Username: {username ? `@ ${username}` : "Yo‘q"}</p>
+      <p className="mb-2">Username: {username ? `@${username}` : "Yo‘q"}</p>
     </div>
   );
 };

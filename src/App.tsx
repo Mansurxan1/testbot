@@ -16,7 +16,6 @@ const App = () => {
           webApp.ready();
           webApp.expand();
 
-          // Fullscreen rejimi
           if (webApp.isVersionAtLeast("8.0")) {
             webApp.requestFullscreen();
           }
@@ -25,22 +24,19 @@ const App = () => {
           }
 
           const user = webApp.initDataUnsafe?.user || {};
-          // Telegramning joriy temasini olish
           const telegramTheme = webApp.colorScheme === "dark" ? "dark" : "light";
 
-          // Redux store’ga ma'lumotlarni yuborish
           dispatch(
             setUserData({
               firstName: user.first_name || "Noma'lum",
               lastName: user.last_name || "",
               photoUrl: user.photo_url || null,
-              theme: telegramTheme, // Telegramning temasiga qat'iy rioya qilish
+              theme: telegramTheme,
               telegramId: user.id?.toString() || "",
               username: user.username || "",
             })
           );
 
-          // Tema o‘zgarishi uchun event
           webApp.onEvent("themeChanged", () => {
             const newTheme = webApp.colorScheme === "dark" ? "dark" : "light";
             dispatch(
@@ -48,15 +44,12 @@ const App = () => {
                 firstName: user.first_name || "Noma'lum",
                 lastName: user.last_name || "",
                 photoUrl: user.photo_url || null,
-                theme: newTheme, // Yangi tema Telegramdan olinadi
+                theme: newTheme,
                 telegramId: user.id?.toString() || "",
                 username: user.username || "",
               })
             );
           });
-
-          // Tekshirish uchun log
-          console.log("Telegramning joriy temasi:", telegramTheme);
         } else {
           console.error("Telegram WebApp yuklanmadi");
         }
@@ -76,12 +69,12 @@ const App = () => {
     }
   }, [dispatch]);
 
+  // Consistent theme application
+  const themeClasses =
+    theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black";
+
   return (
-    <div
-      className={`min-h-screen max-w-[450px] mx-auto ${
-        theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black"
-      }`}
-    >
+    <div className={`min-h-screen max-w-[450px] mx-auto ${themeClasses}`}>
       <AppRouter />
     </div>
   );
