@@ -7,6 +7,9 @@ export default {
       fontFamily: {
         inter: ["Inter"],
       },
+      screens: {
+        'phone': '450px',
+      },
     },
   },
   plugins: [],

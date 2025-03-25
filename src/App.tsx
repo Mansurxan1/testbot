@@ -63,7 +63,7 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className="min-h-screen max-w-[450px] mx-auto">
+    <div className="min-h-screen mx-auto">
       <AppRouter />
     </div>
   );
