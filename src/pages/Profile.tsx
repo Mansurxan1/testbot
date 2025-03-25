@@ -10,7 +10,7 @@ const Profile = () => {
 
   const effectiveTheme = theme || "light";
 
-  const containerClass = `flex flex-col items-center justify-center h-screen ${
+  const containerClass = `flex flex-col items-center justify-center min-h-screen w-full ${
     effectiveTheme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black"
   }`;
   const buttonClass = `absolute top-4 left-4 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${

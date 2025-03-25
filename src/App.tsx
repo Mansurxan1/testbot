@@ -95,21 +95,28 @@ const App = () => {
   const theme = useSelector((state: RootState) => state.telegram.theme);
 
   useEffect(() => {
+    const initializeTelegram = () => {
+      if (window.Telegram?.WebApp) {
+        dispatch(setUserData());
+      }
+    };
+
     if (!window.Telegram) {
       const script = document.createElement("script");
       script.src = "https://telegram.org/js/telegram-web-app.js";
       script.async = true;
-      script.onload = () => dispatch(setUserData());
+      script.onload = () => initializeTelegram();
+      script.onerror = () => console.error("Telegram Web App yuklanmadi");
       document.head.appendChild(script);
     } else {
-      dispatch(setUserData());
+      initializeTelegram();
     }
   }, [dispatch]);
 
   const themeClasses = theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black";
 
   return (
-    <div className={`min-h-screen max-w-[450px] mx-auto ${themeClasses}`}>
+    <div className={`min-h-screen w-full max-w-[450px] mx-auto ${themeClasses}`}>
       <TelegramInit />
       <AppRouter />
     </div>

@@ -10,17 +10,16 @@ const Loader: React.FC = () => {
   const { t } = useTranslation();
   const [showText, setShowText] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
-  const theme = useSelector((state: RootState) => state.telegram.theme) || "light"; // Default qiymat
+  const theme = useSelector((state: RootState) => state.telegram.theme) || "light";
 
   useEffect(() => {
-    console.log("Current theme:", theme); // Tema kuzatish
     const timer1 = setTimeout(() => setShowText(true), 2500);
     const timer2 = setTimeout(() => setIsOpen(false), 5000);
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
     };
-  }, [theme]); // theme qo‘shildi
+  }, []);
 
   if (!isOpen) return null;
 
@@ -30,10 +29,8 @@ const Loader: React.FC = () => {
   const overlayBg = theme === "light" ? "bg-gray-900 bg-opacity-75" : "bg-gray-900 bg-opacity-50";
   const footerTextColor = theme === "light" ? "text-gray-300" : "text-gray-500";
 
-  console.log("Styles applied:", { bgColor, textColor, overlayBg, currentLogo }); // Stil tekshiruvi
-
   return (
-    <div className={`fixed inset-0 flex flex-col items-center justify-center ${overlayBg} z-50`}>
+    <div className={`fixed inset-0 flex flex-col items-center justify-center ${overlayBg} z-50 w-full`}>
       <div className={`flex flex-col items-center justify-center w-full min-h-screen ${bgColor}`}>
         {showText ? (
           <h3 className={`text-lg px-2 font-bold ${textColor} text-center`}>{t("slogan")}</h3>
