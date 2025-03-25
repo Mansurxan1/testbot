@@ -82,22 +82,13 @@
 
 // export default App;
 
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setUserData, setTheme } from "./store/telegramSlice";
-import { RootState } from "./store/store";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setUserData } from "./store/telegramSlice";
 import AppRouter from "./router/AppRouter";
 
 function App() {
   const dispatch = useDispatch();
-  const reduxTheme = useSelector((state: RootState) => state.telegram.theme) || "light";
-
-  // Redux holatini mahalliy state bilan sinxronlash
-  const [theme, setThemeState] = useState(reduxTheme);
-
-  useEffect(() => {
-    setThemeState(reduxTheme);
-  }, [reduxTheme]);
 
   useEffect(() => {
     const checkTelegram = () => {
@@ -115,40 +106,21 @@ function App() {
           }
 
           const user = webApp.initDataUnsafe?.user || {};
-          const telegramTheme = webApp.colorScheme || "light";
 
           dispatch(
             setUserData({
               firstName: user.first_name || "Noma'lum",
               lastName: user.last_name || "",
               photoUrl: user.photo_url || null,
-              theme: telegramTheme,
               telegramId: user.id || 0,
               username: user.username || "",
             })
           );
-
-          // **✅ To‘g‘ri event handler**
-          const updateTheme = () => {
-            const newTheme = webApp.colorScheme || "light";
-            dispatch(setTheme(newTheme));
-          };
-
-          webApp.onEvent("themeChanged", updateTheme);
-
-          // **⏳ Agar `onEvent` ishlamasa, har 2 soniyada tekshirish**
-          const interval = setInterval(updateTheme, 2000);
-
-          return () => {
-            clearInterval(interval); // ⏹ Intervalni to‘xtatish
-          };
         } else {
           console.error("Telegram WebApp yuklanmadi");
-          dispatch(setTheme("light"));
         }
       } catch (error) {
         console.error("Telegram WebApp bilan xatolik:", error);
-        dispatch(setTheme("light"));
       }
     };
 
@@ -164,14 +136,11 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div
-      className={`min-h-screen max-w-[450px] mx-auto ${
-        theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black"
-      }`}
-    >
+    <div className="min-h-screen max-w-[450px] mx-auto">
       <AppRouter />
     </div>
   );
 }
 
 export default App;
+
