@@ -166,7 +166,7 @@ const LoginLanguageModal = () => {
 
   return (
     <div className={`flex pt-5 flex-col items-center justify-center min-h-screen w-full ${bgColor} px-8 pb-20`}>
-      <div className="w-full absolute pt-2 mx-auto max-w-[450px] top-10 flex justify-start">
+      <div className="w-full absolute pt-10 mx-auto max-w-[450px] top-10 flex justify-start">
         <div style={progressBarStyle}></div>
       </div>
       <h2 className={`text-3xl w-60 text-center font-inter font-bold ${textColor} mb-6`}>{t("language")}</h2>
