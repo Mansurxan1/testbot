@@ -8,9 +8,15 @@ import { RootState } from "../store/store";
 
 const Loader: React.FC = () => {
   const { t } = useTranslation();
-  const theme = useSelector((state: RootState) => state.telegram.theme) || "light"; // Default "light"
+  const reduxTheme = useSelector((state: RootState) => state.telegram.theme) || "light";
+
+  const [theme, setThemeState] = useState(reduxTheme);
   const [showText, setShowText] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+
+  useEffect(() => {
+    setThemeState(reduxTheme);
+  }, [reduxTheme]);
 
   useEffect(() => {
     const timer1 = setTimeout(() => setShowText(true), 2500);
@@ -20,12 +26,12 @@ const Loader: React.FC = () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
     };
-  }, []); // Tema o‘zgarishiga bog‘lanmaydi
+  }, []);
 
   if (!isOpen) return null;
 
-  const currentLogo = theme === "dark" ? logodark : logo; // Telegram dark bo‘lsa logodark
-  const bgColor = theme === "dark" ? "bg-[#17212B]" : "bg-white"; // Telegram dark bo‘lsa tun rejimi
+  const currentLogo = theme === "dark" ? logodark : logo;
+  const bgColor = theme === "dark" ? "bg-[#17212B]" : "bg-white";
   const textColor = theme === "dark" ? "text-white" : "text-black";
   const overlayBg = theme === "dark" ? "bg-gray-900 bg-opacity-75" : "bg-gray-900 bg-opacity-50";
   const footerTextColor = theme === "dark" ? "text-gray-300" : "text-gray-500";

@@ -36,14 +36,14 @@
 // export const { setUserData } = telegramSlice.actions;
 // export default telegramSlice.reducer;
 
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface TelegramUser {
   firstName: string;
   lastName: string;
   photoUrl: string | null;
   theme: "light" | "dark";
-  telegramId: number; // Har doim number bo‘ladi
+  telegramId: number;
   username: string;
 }
 
@@ -52,7 +52,7 @@ interface TelegramState {
   lastName: string;
   photoUrl: string | null;
   theme: "light" | "dark";
-  telegramId: number; // Har doim number bo‘ladi
+  telegramId: number;
   username: string;
 }
 
@@ -61,7 +61,7 @@ const initialState: TelegramState = {
   lastName: "",
   photoUrl: null,
   theme: "light",
-  telegramId: 0, // Default qiymat sifatida 0 (number)
+  telegramId: 0,
   username: "",
 };
 
@@ -74,15 +74,14 @@ const telegramSlice = createSlice({
       state.lastName = action.payload.lastName;
       state.photoUrl = action.payload.photoUrl;
       state.theme = action.payload.theme;
-      state.telegramId = action.payload.telegramId; // Number sifatida qoladi
+      state.telegramId = action.payload.telegramId;
       state.username = action.payload.username;
     },
     setTheme: (state, action: PayloadAction<"light" | "dark">) => {
-      state.theme = action.payload; // Telegramdan kelgan tema o‘rnatiladi
+      state.theme = action.payload;
     },
   },
 });
 
 export const { setUserData, setTheme } = telegramSlice.actions;
-
 export default telegramSlice.reducer;

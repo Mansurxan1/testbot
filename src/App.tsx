@@ -82,14 +82,22 @@
 
 // export default App;
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserData, setTheme } from "./store/telegramSlice";
+import { RootState } from "./store/store";
 import AppRouter from "./router/AppRouter";
 
 function App() {
   const dispatch = useDispatch();
-  const theme = useSelector((state: any) => state.telegram.theme) || "light"; // Default "light"
+  const reduxTheme = useSelector((state: RootState) => state.telegram.theme) || "light";
+
+  // Redux holatini mahalliy state bilan sinxronlash
+  const [theme, setThemeState] = useState(reduxTheme);
+
+  useEffect(() => {
+    setThemeState(reduxTheme);
+  }, [reduxTheme]);
 
   useEffect(() => {
     const checkTelegram = () => {
@@ -103,36 +111,44 @@ function App() {
             webApp.requestFullscreen();
           }
           if (webApp.isVersionAtLeast("7.0")) {
-            webApp.setHeaderColor("#00000000"); // Transparent header
+            webApp.setHeaderColor("#00000000");
           }
 
           const user = webApp.initDataUnsafe?.user || {};
-          const telegramTheme = webApp.colorScheme || "light"; // Telegramning joriy temi
+          const telegramTheme = webApp.colorScheme || "light";
 
-          // Foydalanuvchi ma’lumotlari va Telegram temi Redux’ga yuboriladi
           dispatch(
             setUserData({
               firstName: user.first_name || "Noma'lum",
               lastName: user.last_name || "",
               photoUrl: user.photo_url || null,
-              theme: telegramTheme, // Telegramning colorScheme’iga qarab
-              telegramId: user.id || 0, // Number sifatida
+              theme: telegramTheme,
+              telegramId: user.id || 0,
               username: user.username || "",
             })
           );
 
-          // Tema o‘zgarganda Telegram bilan sinxronlash
-          webApp.onEvent("themeChanged", () => {
-            const newTheme = webApp.colorScheme || "light"; // Telegramning yangi temi
-            dispatch(setTheme(newTheme)); // Redux’ga yangi tema o‘rnatiladi
-          });
+          // **✅ To‘g‘ri event handler**
+          const updateTheme = () => {
+            const newTheme = webApp.colorScheme || "light";
+            dispatch(setTheme(newTheme));
+          };
+
+          webApp.onEvent("themeChanged", updateTheme);
+
+          // **⏳ Agar `onEvent` ishlamasa, har 2 soniyada tekshirish**
+          const interval = setInterval(updateTheme, 2000);
+
+          return () => {
+            clearInterval(interval); // ⏹ Intervalni to‘xtatish
+          };
         } else {
           console.error("Telegram WebApp yuklanmadi");
-          dispatch(setTheme("light")); // Telegram bo‘lmasa default "light"
+          dispatch(setTheme("light"));
         }
       } catch (error) {
         console.error("Telegram WebApp bilan xatolik:", error);
-        dispatch(setTheme("light")); // Xatolik bo‘lsa default "light"
+        dispatch(setTheme("light"));
       }
     };
 
