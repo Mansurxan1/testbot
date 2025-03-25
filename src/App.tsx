@@ -86,11 +86,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserData, setTheme } from "./store/telegramSlice";
+import { RootState } from "./store/store"; // RootState qo‘shildi
 import AppRouter from "./router/AppRouter";
 
 function App() {
   const dispatch = useDispatch();
-  const theme = useSelector((state: any) => state.telegram.theme) || "light"; // Default "light"
+  const theme = useSelector((state: RootState) => state.telegram.theme) || "light"; // Default "light"
 
   useEffect(() => {
     const checkTelegram = () => {
@@ -108,33 +109,31 @@ function App() {
           }
 
           const user = webApp.initDataUnsafe?.user || {};
-          const telegramTheme = webApp.colorScheme || "light"; // Default "light"
+          const telegramTheme = webApp.colorScheme || "light"; // Telegramdan kelgan tema
 
-          // Dispatch complete user data to Redux
+          // Foydalanuvchi ma’lumotlarini Redux’ga yuborish
           dispatch(
             setUserData({
               firstName: user.first_name || "Noma'lum",
               lastName: user.last_name || "",
               photoUrl: user.photo_url || null,
               theme: telegramTheme,
-              telegramId: user.id || 0, // Number sifatida, default 0
+              telegramId: user.id || 0, // Number sifatida
               username: user.username || "",
             })
           );
 
-          // Add event listener for theme changes
+          // Tema o‘zgarganda sinxronlash
           webApp.onEvent("themeChanged", () => {
             const newTheme = webApp.colorScheme || "light";
-            dispatch(setTheme(newTheme));
+            dispatch(setTheme(newTheme)); // To‘g‘ridan-to‘g‘ri Telegram temasini o‘rnatish
           });
         } else {
           console.error("Telegram WebApp yuklanmadi");
-          // Set default theme for testing outside Telegram
-          dispatch(setTheme("light"));
+          dispatch(setTheme("light")); // Default tema
         }
       } catch (error) {
         console.error("Telegram WebApp bilan xatolik:", error);
-        // Set default theme for error cases
         dispatch(setTheme("light"));
       }
     };
@@ -150,7 +149,6 @@ function App() {
     }
   }, [dispatch]);
 
-  // Use theme directly from Redux state
   return (
     <div
       className={`min-h-screen max-w-[450px] mx-auto ${
