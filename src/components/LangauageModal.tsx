@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 
-// Mamlakatlar ro‘yxati
 const countries: string[] = [
   "Afghanistan",
   "Albania",
@@ -31,7 +30,7 @@ const LoginLanguageModal: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
-  const [username, setUsername] = useState<string>(telegramUsername ? `@${telegramUsername}` : ""); // Boshlang‘ich qiymat
+  const [username, setUsername] = useState<string>(telegramUsername ? `@${telegramUsername}` : "");
   const [usernameError, setUsernameError] = useState<string | null>(null);
   const [progress, setProgress] = useState<number>(selectedLang ? 33 : 0);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
@@ -40,12 +39,10 @@ const LoginLanguageModal: React.FC = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState<boolean>(false);
 
-  // Til o‘zgarganda i18n ni yangilash
   useEffect(() => {
     if (selectedLang) i18n.changeLanguage(selectedLang);
   }, [selectedLang, i18n]);
 
-  // Dropdown tashqarisiga bosilganda yopish
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -56,7 +53,6 @@ const LoginLanguageModal: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Klaviatura holatini aniqlash
   useEffect(() => {
     const detectKeyboard = () => {
       const viewportHeight = window.visualViewport?.height || window.innerHeight;
@@ -71,7 +67,6 @@ const LoginLanguageModal: React.FC = () => {
     };
   }, []);
 
-  // Progressni yangilash
   useEffect(() => {
     if (!selectedLang) setProgress(0);
     else if (showDetailsModal) {
@@ -109,13 +104,29 @@ const LoginLanguageModal: React.FC = () => {
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Faqat @, harflar, raqamlar va "-" ga ruxsat beramiz
-    if (/^[@a-zA-Z0-9-]*$/.test(value)) {
-      setUsername(value);
-      if (value.startsWith("-") || value.endsWith("-")) {
-        setUsernameError(t("username_error"));
-      } else {
-        setUsernameError(null);
+    // Agar Telegram username mavjud bo‘lsa
+    if (telegramUsername) {
+      // Faqat @ dan keyingi qismni o‘zgartirishga ruxsat beramiz
+      if (value.startsWith("@")) {
+        const afterAt = value.slice(1); // @ dan keyingi qism
+        if (/^[a-zA-Z0-9-]*$/.test(afterAt)) {
+          setUsername(`@${afterAt}`);
+          if (afterAt.startsWith("-") || afterAt.endsWith("-")) {
+            setUsernameError(t("username_error"));
+          } else {
+            setUsernameError(null);
+          }
+        }
+      }
+    } else {
+      // Agar Telegram username bo‘lmasa, foydalanuvchi @ bilan boshlashni tanlashi mumkin
+      if (/^[@a-zA-Z0-9-]*$/.test(value)) {
+        setUsername(value);
+        if (value.startsWith("-") || value.endsWith("-")) {
+          setUsernameError(t("username_error"));
+        } else {
+          setUsernameError(null);
+        }
       }
     }
   };
@@ -138,7 +149,6 @@ const LoginLanguageModal: React.FC = () => {
     country.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Stil va ranglar
   const textColor = theme === "light" ? "text-black" : "text-white";
   const bgColor = theme === "light" ? "bg-[#F1F1F1]" : "bg-[#242f3d]";
   const buttonBg = theme === "light" ? "bg-white" : "bg-[#293A4C]";
