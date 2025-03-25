@@ -36,39 +36,32 @@
 // export const { setUserData } = telegramSlice.actions;
 // export default telegramSlice.reducer;
 
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-interface TelegramUser {
+export interface TelegramUser {
   firstName: string;
   lastName: string;
   photoUrl: string | null;
   theme: "light" | "dark";
-  telegramId: string;
-  username?: string;
+  telegramId: number; // Har doim number bo‘ladi
+  username: string;
 }
 
-const getTelegramTheme = (): "light" | "dark" => {
-  return window.Telegram?.WebApp?.colorScheme === "dark" ? "dark" : "light";
-};
+interface TelegramState {
+  firstName: string;
+  lastName: string;
+  photoUrl: string | null;
+  theme: "light" | "dark";
+  telegramId: number; // Har doim number bo‘ladi
+  username: string;
+}
 
-export const getTelegramUser = (): TelegramUser => {
-  const user = window.Telegram?.WebApp?.initDataUnsafe?.user || {};
-  return {
-    firstName: user.first_name || "Noma'lum",
-    lastName: user.last_name || "",
-    photoUrl: user.photo_url || null,
-    theme: getTelegramTheme(),
-    telegramId: user.id?.toString() || "",
-    username: user.username || "",
-  };
-};
-
-const initialState: TelegramUser = {
+const initialState: TelegramState = {
   firstName: "",
   lastName: "",
   photoUrl: null,
   theme: "light",
-  telegramId: "",
+  telegramId: 0, // Default qiymat sifatida 0 (number)
   username: "",
 };
 
@@ -81,14 +74,15 @@ const telegramSlice = createSlice({
       state.lastName = action.payload.lastName;
       state.photoUrl = action.payload.photoUrl;
       state.theme = action.payload.theme;
-      state.telegramId = action.payload.telegramId;
+      state.telegramId = action.payload.telegramId; // Number sifatida qoladi
       state.username = action.payload.username;
     },
     setTheme: (state, action: PayloadAction<"light" | "dark">) => {
-      state.theme = action.payload;
+      state.theme = action.payload; // Faqat tema o‘zgartiriladi
     },
   },
 });
 
 export const { setUserData, setTheme } = telegramSlice.actions;
+
 export default telegramSlice.reducer;
