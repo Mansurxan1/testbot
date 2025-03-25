@@ -16,17 +16,18 @@ const Profile = () => {
       firstName: firstName || user.first_name || "Noma'lum",
       lastName: lastName || user.last_name || "",
       photoUrl: photoUrl || user.photo_url || null,
-      telegramId: telegramId || user.id || 0, 
+      telegramId: telegramId || user.id || 0,
       username: username || user.username || "Yo'q",
     };
   };
 
   const userData = getUserData();
+  const bgColor = theme === "light" ? "bg-[#F1F1F1]" : "bg-[#242f3d]";
 
-  const containerClass = `flex flex-col items-center justify-center min-h-screen w-full ${
+  const containerClass = `relative flex flex-col mx-auto max-w-[450px] items-center min-h-screen w-full pt-16 pb-8 ${
     effectiveTheme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black"
   }`;
-  const buttonClass = `absolute top-4 left-4 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
+  const buttonClass = `absolute top-4 left-4 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 z-10 ${
     effectiveTheme === "dark" ? "bg-gray-800 hover:bg-gray-700 text-white" : "bg-blue-500 hover:bg-blue-600 text-white"
   }`;
   const titleClass = `text-2xl font-bold mb-4 ${effectiveTheme === "dark" ? "text-blue-400" : "text-blue-600"}`;
@@ -35,7 +36,7 @@ const Profile = () => {
   }`;
 
   return (
-    <div className={`${containerClass} pt-5`} >
+    <div className={`${containerClass} ${bgColor} `}>
       <button onClick={() => navigate(-1)} className={buttonClass}>
         Ortga
       </button>
@@ -51,7 +52,7 @@ const Profile = () => {
           className="w-32 h-32 rounded-full mb-4 object-cover border-2 border-blue-500"
           onError={(e) => {
             console.log("Rasm yuklanmadi:", userData.photoUrl);
-            e.currentTarget.onerror = null; // Infinite loop oldini olish
+            e.currentTarget.onerror = null; 
             e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
               userData.firstName
             )}&background=random`;
@@ -75,4 +76,3 @@ const Profile = () => {
 };
 
 export default Profile;
-

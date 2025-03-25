@@ -24,7 +24,6 @@ const RouterContent: React.FC = () => {
 
   return (
     <>
-      <Menu />
       {isInitialLoad && !hideLoader && <Loader />}
       <Routes>
         <Route path="/" element={<Home />} />
@@ -33,6 +32,7 @@ const RouterContent: React.FC = () => {
         <Route path="/privacy" element={<Privacy/>} />
         <Route path="/language" element={<LoginLanguageModal />} />
       </Routes>
+      <Menu />
     </>
   );
 };

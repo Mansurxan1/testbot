@@ -17,7 +17,6 @@ function App() {
           const initialTheme = webApp.colorScheme || "light";
           dispatch(setTheme(initialTheme));
 
-          // Foydalanuvchi ma'lumotlarini olish 
           const initData = webApp.initDataUnsafe?.user;
           if (initData) {
             dispatch(
