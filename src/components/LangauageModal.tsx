@@ -156,7 +156,7 @@ const LoginLanguageModal = () => {
     theme === "light" ? "shadow-[0px_10px_15px_-3px_#00000026]" : "shadow-[0px_10px_15px_-3px_#00000033]";
 
   const progressBarStyle = {
-    height: "4px",
+    height: "2px",
     backgroundImage: `linear-gradient(to right, #0061FF 0%, #52DAFF ${progress}%, #E5E7EB ${progress}%, #E5E7EB 100%)`,
     width: "100%",
     transition: "background-image 0.3s ease",
@@ -166,7 +166,7 @@ const LoginLanguageModal = () => {
 
   return (
     <div className={`flex pt-5 flex-col items-center justify-center min-h-screen w-full ${bgColor} px-8 pb-20`}>
-      <div className="w-full absolute pt-10 mx-auto max-w-[450px] top-10 flex justify-start">
+      <div className="w-full absolute pt-20 mx-auto max-w-[450px] top-10 flex justify-start">
         <div style={progressBarStyle}></div>
       </div>
       <h2 className={`text-3xl w-60 text-center font-inter font-bold ${textColor} mb-6`}>{t("language")}</h2>
@@ -204,7 +204,7 @@ const LoginLanguageModal = () => {
             <div className="max-w-[450px] w-full sticky top-0 flex flex-col z-10 bg-inherit">
               <button
                 onClick={() => (setShowDetailsModal(false), setProgress(33))}
-                className={`${textColor} text-[24px] px-4 self-start`}
+                className={`${textColor} text-[24px] px-4 pt-20 self-start`}
               >
                 <ChevronDown className="h-6 w-6 transform rotate-90" strokeWidth={3} />
               </button>
