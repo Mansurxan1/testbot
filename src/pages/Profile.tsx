@@ -10,14 +10,13 @@ const Profile = () => {
 
   const effectiveTheme = theme || "light";
 
-  // Telegram WebApp’dan foydalanuvchi ma’lumotlarini olish
   const getUserData = () => {
     const user = window.Telegram?.WebApp?.initDataUnsafe?.user || {};
     return {
       firstName: firstName || user.first_name || "Noma'lum",
       lastName: lastName || user.last_name || "",
       photoUrl: photoUrl || user.photo_url || null,
-      telegramId: telegramId || user.id || 0, // Number sifatida, default 0
+      telegramId: telegramId || user.id || 0, 
       username: username || user.username || "Yo'q",
     };
   };
@@ -36,7 +35,7 @@ const Profile = () => {
   }`;
 
   return (
-    <div className={containerClass}>
+    <div className={`${containerClass} pt-5`} >
       <button onClick={() => navigate(-1)} className={buttonClass}>
         Ortga
       </button>
