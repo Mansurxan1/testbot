@@ -165,7 +165,7 @@ const LoginLanguageModal = () => {
   const buttonPositionClass = isKeyboardVisible ? "relative mt-8 mb-4" : "fixed bottom-8 left-7 right-7";
 
   return (
-    <div className={`flex pt-5 flex-col items-center justify-center min-h-screen w-full ${bgColor} px-8 pb-20`}>
+    <div className={`flex pt-5 flex-col items-center justify-center mx-auto max-w-[450px] min-h-screen w-full ${bgColor} px-8 pb-20`}>
       <div className="w-full absolute pt-20 phone:pt-5 mx-auto max-w-[450px] top-8 flex justify-start">
         <div style={progressBarStyle}></div>
       </div>
