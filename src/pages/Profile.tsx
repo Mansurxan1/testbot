@@ -8,17 +8,8 @@ const Profile = () => {
     (state: RootState) => state.telegram
   );
 
-  // Test uchun log qo‘shish
-  console.log("Redux state:", { firstName, lastName, photoUrl, theme, telegramId, username });
-
-  const handleBack = () => {
-    navigate(-1);
-  };
-
-  // Default tema qo‘shish (agar Redux’dan kelmasa)
   const effectiveTheme = theme || "light";
 
-  // Stil sinflari
   const containerClass = `flex flex-col items-center justify-center h-screen ${
     effectiveTheme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black"
   }`;
@@ -34,7 +25,7 @@ const Profile = () => {
 
   return (
     <div className={containerClass}>
-      <button onClick={handleBack} className={buttonClass}>
+      <button onClick={() => navigate(-1)} className={buttonClass}>
         Ortga
       </button>
 

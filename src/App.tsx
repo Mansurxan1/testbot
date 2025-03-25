@@ -88,79 +88,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUserData } from "./store/telegramSlice";
 import { RootState } from "./store/store";
 import AppRouter from "./router/AppRouter";
+import TelegramInit from "./types/TelegramInit";
 
 const App = () => {
   const dispatch = useDispatch();
   const theme = useSelector((state: RootState) => state.telegram.theme);
 
   useEffect(() => {
-    const checkTelegram = () => {
-      try {
-        if (window.Telegram?.WebApp) {
-          const webApp = window.Telegram.WebApp;
-          webApp.ready();
-          webApp.expand();
-
-          if (webApp.isVersionAtLeast("8.0")) {
-            webApp.requestFullscreen();
-          }
-          if (webApp.isVersionAtLeast("7.0")) {
-            webApp.setHeaderColor("#00000000"); // Shaffof header
-          }
-
-          const user = webApp.initDataUnsafe?.user || {};
-          const telegramTheme = webApp.colorScheme; // Telegramdan kelgan tema
-
-          dispatch(
-            setUserData({
-              firstName: user.first_name || "Noma'lum",
-              lastName: user.last_name || "",
-              photoUrl: user.photo_url || null,
-              theme: telegramTheme, // Telegramning colorScheme qiymati
-              telegramId: user.id?.toString() || "",
-              username: user.username || "",
-            })
-          );
-
-          // Tema o‘zgarishi hodisasi
-          webApp.onEvent("themeChanged", () => {
-            const newTheme = webApp.colorScheme;
-            dispatch(
-              setUserData({
-                firstName: user.first_name || "Noma'lum",
-                lastName: user.last_name || "",
-                photoUrl: user.photo_url || null,
-                theme: newTheme, // Yangi tema Telegramdan olinadi
-                telegramId: user.id?.toString() || "",
-                username: user.username || "",
-              })
-            );
-          });
-        } else {
-          console.error("Telegram WebApp yuklanmadi");
-        }
-      } catch (error) {
-        console.error("Telegram WebApp bilan xatolik:", error);
-      }
-    };
-
     if (!window.Telegram) {
       const script = document.createElement("script");
       script.src = "https://telegram.org/js/telegram-web-app.js";
       script.async = true;
-      script.onload = checkTelegram;
-      script.onerror = () => console.error("Telegram skripti yuklanmadi");
+      script.onload = () => dispatch(setUserData());
       document.head.appendChild(script);
     } else {
-      checkTelegram();
+      dispatch(setUserData());
     }
   }, [dispatch]);
 
-  // Telegramning colorScheme’ga asoslangan tema sinflari
   const themeClasses = theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black";
 
   return (
     <div className={`min-h-screen max-w-[450px] mx-auto ${themeClasses}`}>
+      <TelegramInit />
       <AppRouter />
     </div>
   );

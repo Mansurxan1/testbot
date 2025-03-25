@@ -42,16 +42,32 @@ interface TelegramUser {
   firstName: string;
   lastName: string;
   photoUrl: string | null;
-  theme: "light" | "dark"; // Telegramdan keladigan tema
+  theme: "light" | "dark";
   telegramId: string;
   username?: string;
 }
+
+const getTelegramTheme = (): "light" | "dark" => {
+  return window.Telegram?.WebApp?.colorScheme === "dark" ? "dark" : "light";
+};
+
+const getTelegramUser = (): TelegramUser => {
+  const user = window.Telegram?.WebApp?.initDataUnsafe?.user || {};
+  return {
+    firstName: user.first_name || "Noma'lum",
+    lastName: user.last_name || "",
+    photoUrl: user.photo_url || null,
+    theme: getTelegramTheme(),
+    telegramId: user.id?.toString() || "",
+    username: user.username || "",
+  };
+};
 
 const initialState: TelegramUser = {
   firstName: "",
   lastName: "",
   photoUrl: null,
-  theme: "light", // Dastlabki qiymat sifatida "light"
+  theme: "light",
   telegramId: "",
   username: "",
 };
@@ -60,16 +76,20 @@ const telegramSlice = createSlice({
   name: "telegram",
   initialState,
   reducers: {
-    setUserData: (state, action: PayloadAction<TelegramUser>) => {
-      state.firstName = action.payload.firstName;
-      state.lastName = action.payload.lastName;
-      state.photoUrl = action.payload.photoUrl;
-      state.theme = action.payload.theme; // Faqat Telegramdan kelgan tema ishlatiladi
-      state.telegramId = action.payload.telegramId;
-      state.username = action.payload.username || "";
+    setUserData: (state) => {
+      const userData = getTelegramUser();
+      state.firstName = userData.firstName;
+      state.lastName = userData.lastName;
+      state.photoUrl = userData.photoUrl;
+      state.theme = userData.theme;
+      state.telegramId = userData.telegramId;
+      state.username = userData.username;
+    },
+    setTheme: (state, action: PayloadAction<"light" | "dark">) => {
+      state.theme = action.payload;
     },
   },
 });
 
-export const { setUserData } = telegramSlice.actions;
+export const { setUserData, setTheme } = telegramSlice.actions;
 export default telegramSlice.reducer;
