@@ -8,18 +8,23 @@ import { RootState } from "../store/store";
 
 const Loader: React.FC = () => {
   const { t } = useTranslation();
+  const theme = useSelector((state: RootState) => state.telegram.theme) || "light";
   const [showText, setShowText] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
-  const theme = useSelector((state: RootState) => state.telegram.theme) || "light";
 
   useEffect(() => {
+    // Har safar theme o‘zgarsa, loader qayta ko‘rinadi
+    setIsOpen(true);
+    setShowText(false); // Matnni ham qayta boshlash
+    
     const timer1 = setTimeout(() => setShowText(true), 2500);
     const timer2 = setTimeout(() => setIsOpen(false), 5000);
+
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
     };
-  }, []);
+  }, [theme]); // `theme` qo‘shildi
 
   if (!isOpen) return null;
 
