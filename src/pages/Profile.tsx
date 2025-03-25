@@ -36,7 +36,7 @@ const Profile = () => {
   }`;
 
   return (
-    <div className={`${containerClass} ${bgColor} mt-5`}>
+    <div className={`${containerClass} ${bgColor} mt-10 phone:mt-2`}>
       <button onClick={() => navigate(-1)} className={`${buttonClass} `}>
         Ortga
       </button>
