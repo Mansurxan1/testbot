@@ -1,30 +1,28 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import logo from "../assets/images/logo.png";
 import logodark from "../assets/images/logodark.png";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { setTheme } from "../store/telegramSlice";
 
 const Loader: React.FC = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const theme = useSelector((state: RootState) => state.telegram.theme) || "light";
+  const theme = useSelector((state: RootState) => state.telegram.theme) || "light"; // To'g'ridan-to'g'ri Redux'dan
+  const [showText, setShowText] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
-    if (window.Telegram?.WebApp) {
-      const webApp = window.Telegram.WebApp;
+    const timer1 = setTimeout(() => setShowText(true), 2500);
+    const timer2 = setTimeout(() => setIsOpen(false), 5000);
 
-      // Foydalanuvchi Telegram WebApp-da qanday tema ishlatayotganini olamiz
-      dispatch(setTheme(webApp.colorScheme));
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
+  }, []);
 
-      // Agar tema o‘zgarsa, Redux state ham yangilanishi kerak
-      webApp.onEvent("themeChanged", () => {
-        dispatch(setTheme(webApp.colorScheme));
-      });
-    }
-  }, [dispatch]);
+  if (!isOpen) return null;
 
   const currentLogo = theme === "dark" ? logodark : logo;
   const bgColor = theme === "dark" ? "bg-[#17212B]" : "bg-white";
@@ -35,8 +33,11 @@ const Loader: React.FC = () => {
   return (
     <div className={`fixed inset-0 flex flex-col items-center justify-center ${overlayBg} z-50 w-full`}>
       <div className={`flex flex-col items-center justify-center w-full min-h-screen ${bgColor}`}>
-        <img src={currentLogo} alt="Turnify Logo" className="h-24 w-auto object-cover mb-4" />
-        <h3 className={`text-lg px-2 font-bold ${textColor} text-center`}>{t("slogan")}</h3>
+        {showText ? (
+          <h3 className={`text-lg px-2 font-bold ${textColor} text-center`}>{t("slogan")}</h3>
+        ) : (
+          <img src={currentLogo} alt="Turnify Logo" className="h-24 w-auto object-cover mb-4" />
+        )}
       </div>
       <div className={`fixed bottom-8 px-4 ${footerTextColor} text-sm w-full text-center`}>
         {t("copyright")} <br />

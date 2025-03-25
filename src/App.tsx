@@ -84,6 +84,7 @@
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { setTheme, setUserData } from "./store/telegramSlice"; // setUserData qo'shildi
 import AppRouter from "./router/AppRouter";
 
 function App() {
@@ -97,13 +98,37 @@ function App() {
           webApp.ready();
           webApp.expand();
 
+          // Tema rejimini olish va Redux'ga yuborish
+          const initialTheme = webApp.colorScheme || "light";
+          dispatch(setTheme(initialTheme));
+
+          // Foydalanuvchi ma'lumotlarini olish (agar mavjud bo'lsa)
+          const initData = webApp.initDataUnsafe?.user;
+          if (initData) {
+            dispatch(
+              setUserData({
+                firstName: initData.first_name || "",
+                lastName: initData.last_name || "",
+                photoUrl: initData.photo_url || null,
+                theme: initialTheme,
+                telegramId: initData.id || 0,
+                username: initData.username || "",
+              })
+            );
+          }
+
+          // Tema o'zgarishini tinglash
+          webApp.onEvent("themeChanged", () => {
+            const newTheme = webApp.colorScheme || "light";
+            dispatch(setTheme(newTheme));
+          });
+
           if (webApp.isVersionAtLeast("8.0")) {
             webApp.requestFullscreen();
           }
           if (webApp.isVersionAtLeast("7.0")) {
             webApp.setHeaderColor("#00000000");
           }
-
         } else {
           console.error("Telegram WebApp yuklanmadi");
         }
@@ -131,4 +156,3 @@ function App() {
 }
 
 export default App;
-
