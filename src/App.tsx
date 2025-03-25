@@ -84,7 +84,6 @@
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setUserData } from "./store/telegramSlice";
 import AppRouter from "./router/AppRouter";
 
 function App() {
@@ -105,17 +104,6 @@ function App() {
             webApp.setHeaderColor("#00000000");
           }
 
-          const user = webApp.initDataUnsafe?.user || {};
-
-          dispatch(
-            setUserData({
-              firstName: user.first_name || "Noma'lum",
-              lastName: user.last_name || "",
-              photoUrl: user.photo_url || null,
-              telegramId: user.id || 0,
-              username: user.username || "",
-            })
-          );
         } else {
           console.error("Telegram WebApp yuklanmadi");
         }
