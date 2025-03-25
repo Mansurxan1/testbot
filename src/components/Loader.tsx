@@ -1,34 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import logo from "../assets/images/logo.png";
 import logodark from "../assets/images/logodark.png";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
+import { setTheme } from "../store/telegramSlice";
 
 const Loader: React.FC = () => {
   const { t } = useTranslation();
-  const reduxTheme = useSelector((state: RootState) => state.telegram.theme) || "light";
-
-  const [theme, setThemeState] = useState(reduxTheme);
-  const [showText, setShowText] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
+  const dispatch = useDispatch();
+  const theme = useSelector((state: RootState) => state.telegram.theme) || "light";
 
   useEffect(() => {
-    setThemeState(reduxTheme);
-  }, [reduxTheme]);
+    if (window.Telegram?.WebApp) {
+      const webApp = window.Telegram.WebApp;
 
-  useEffect(() => {
-    const timer1 = setTimeout(() => setShowText(true), 2500);
-    const timer2 = setTimeout(() => setIsOpen(false), 5000);
+      // Foydalanuvchi Telegram WebApp-da qanday tema ishlatayotganini olamiz
+      dispatch(setTheme(webApp.colorScheme));
 
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
-  }, []);
-
-  if (!isOpen) return null;
+      // Agar tema o‘zgarsa, Redux state ham yangilanishi kerak
+      webApp.onEvent("themeChanged", () => {
+        dispatch(setTheme(webApp.colorScheme));
+      });
+    }
+  }, [dispatch]);
 
   const currentLogo = theme === "dark" ? logodark : logo;
   const bgColor = theme === "dark" ? "bg-[#17212B]" : "bg-white";
@@ -39,11 +35,8 @@ const Loader: React.FC = () => {
   return (
     <div className={`fixed inset-0 flex flex-col items-center justify-center ${overlayBg} z-50 w-full`}>
       <div className={`flex flex-col items-center justify-center w-full min-h-screen ${bgColor}`}>
-        {showText ? (
-          <h3 className={`text-lg px-2 font-bold ${textColor} text-center`}>{t("slogan")}</h3>
-        ) : (
-          <img src={currentLogo} alt="Turnify Logo" className="h-24 w-auto object-cover mb-4" />
-        )}
+        <img src={currentLogo} alt="Turnify Logo" className="h-24 w-auto object-cover mb-4" />
+        <h3 className={`text-lg px-2 font-bold ${textColor} text-center`}>{t("slogan")}</h3>
       </div>
       <div className={`fixed bottom-8 px-4 ${footerTextColor} text-sm w-full text-center`}>
         {t("copyright")} <br />
