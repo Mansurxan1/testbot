@@ -85,39 +85,37 @@
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserData } from "./store/telegramSlice";
+import { initializeTelegramData } from "./store/telegramSlice";
 import { RootState } from "./store/store";
 import AppRouter from "./router/AppRouter";
-import TelegramInit from "./types/TelegramInit";
 
 const App = () => {
   const dispatch = useDispatch();
   const theme = useSelector((state: RootState) => state.telegram.theme);
 
   useEffect(() => {
-    const initializeTelegram = () => {
-      if (window.Telegram?.WebApp) {
-        dispatch(setUserData());
+    const loadTelegramScript = () => {
+      if (!window.Telegram) {
+        const script = document.createElement("script");
+        script.src = "https://telegram.org/js/telegram-web-app.js";
+        script.async = true;
+        script.onload = () => {
+          dispatch(initializeTelegramData({ dispatch }));
+        };
+        script.onerror = () => console.error("Telegram skripti yuklanmadi");
+        document.head.appendChild(script);
+      } else {
+        dispatch(initializeTelegramData({ dispatch }));
       }
     };
 
-    if (!window.Telegram) {
-      const script = document.createElement("script");
-      script.src = "https://telegram.org/js/telegram-web-app.js";
-      script.async = true;
-      script.onload = () => initializeTelegram();
-      script.onerror = () => console.error("Telegram Web App yuklanmadi");
-      document.head.appendChild(script);
-    } else {
-      initializeTelegram();
-    }
+    loadTelegramScript();
   }, [dispatch]);
 
   const themeClasses = theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black";
 
   return (
     <div className={`min-h-screen w-full max-w-[450px] mx-auto ${themeClasses}`}>
-      <TelegramInit />
       <AppRouter />
     </div>
   );
