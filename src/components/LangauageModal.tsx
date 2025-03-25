@@ -252,7 +252,7 @@ const LoginLanguageModal = () => {
             <div className="max-w-[450px] w-full sticky top-0 flex flex-col z-10 bg-inherit">
               <button
                 onClick={() => (setShowUsernameModal(false), setShowDetailsModal(true), setProgress(66))}
-                className={`${textColor} text-[24px] px-4 pt-10 self-start`}
+                className={`${textColor} text-[24px] px-4 pt-20 pt-10 self-start`}
               >
                 <ChevronDown className="h-6 w-6 transform rotate-90" strokeWidth={3} />
               </button>
@@ -294,7 +294,7 @@ const LoginLanguageModal = () => {
             <div className="w-full max-w-[450px] sticky top-0 flex flex-col z-10 bg-inherit">
               <button
                 onClick={() => (setShowTimeZoneModal(false), setShowUsernameModal(true), setProgress(75))}
-                className={`${textColor} px-4 text-[24px] pt-10 self-start`}
+                className={`${textColor} px-4 text-[24px] pt-20 self-start`}
               >
                 <ChevronDown className="h-6 w-6 transform rotate-90" strokeWidth={3} />
               </button>
