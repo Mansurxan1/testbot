@@ -24,7 +24,7 @@ const Profile = () => {
   const userData = getUserData();
   const bgColor = theme === "light" ? "bg-[#F1F1F1]" : "bg-[#242f3d]";
 
-  const containerClass = `relative flex flex-col mx-auto max-w-[450px] items-center min-h-screen w-full pt-20 pb-8 ${
+  const containerClass = `relative top-20 phone:top-0 flex flex-col mx-auto max-w-[450px] items-center min-h-screen w-full pt-20 pb-8  ${
     effectiveTheme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black"
   }`;
   const buttonClass = `absolute top-4 left-4 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 z-10 ${
@@ -36,7 +36,7 @@ const Profile = () => {
   }`;
 
   return (
-    <div className={`${containerClass} ${bgColor} pt-16 phone:pt-2`}>
+    <div className={`${containerClass} ${bgColor}`}>
       <button onClick={() => navigate(-1)} className={`${buttonClass} `}>
         Ortga
       </button>
