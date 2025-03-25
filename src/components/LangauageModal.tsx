@@ -74,7 +74,7 @@ const LoginLanguageModal: React.FC = () => {
       else if (firstName.trim() && lastName.trim()) setProgress(66);
       else setProgress(33);
     } else if (showUsernameModal) {
-      setProgress(username.trim() ? 75 : 66);
+      setProgress(username.trim() && username !== "@" ? 75 : 66);
     } else if (showTimeZoneModal) {
       setProgress(selectedCountry ? 100 : 75);
     } else {
@@ -104,10 +104,12 @@ const LoginLanguageModal: React.FC = () => {
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Agar Telegram username mavjud bo‘lsa
     if (telegramUsername) {
-      // Faqat @ dan keyingi qismni o‘zgartirishga ruxsat beramiz
-      if (value.startsWith("@")) {
+      // Agar Telegram username mavjud bo‘lsa, @ doim saqlanadi
+      if (!value.startsWith("@")) {
+        // Agar @ o‘chirilgan bo‘lsa, avvalgi qiymatni qaytarib qo‘yamiz yoki minimal @ qoldiramiz
+        setUsername(username || "@");
+      } else {
         const afterAt = value.slice(1); // @ dan keyingi qism
         if (/^[a-zA-Z0-9-]*$/.test(afterAt)) {
           setUsername(`@${afterAt}`);
@@ -289,15 +291,15 @@ const LoginLanguageModal: React.FC = () => {
               <p className="mt-2 text-[12px] text-[#768C9E] text-center">{t("username_rules")}</p>
               <button
                 onClick={() => {
-                  if (username.trim() && !username.startsWith("-") && !username.endsWith("-")) {
+                  if (username.trim() && username !== "@" && !username.startsWith("-") && !username.endsWith("-")) {
                     setShowUsernameModal(false);
                     setShowTimeZoneModal(true);
                   }
                 }}
-                disabled={!username.trim() || username.startsWith("-") || username.endsWith("-")}
+                disabled={!username.trim() || username === "@" || username.startsWith("-") || username.endsWith("-")}
                 className={`max-w-[385px] mx-auto p-3 rounded-xl font-semibold transition-colors ${buttonBackground(
-                  !!(username.trim() && !username.startsWith("-") && !username.endsWith("-"))
-                )} ${!username.trim() || username.startsWith("-") || username.endsWith("-") ? `cursor-not-allowed ${defaultButtonTextColor}` : activeButtonTextColor} ${buttonPositionClass}`}
+                  !!(username.trim() && username !== "@" && !username.startsWith("-") && !username.endsWith("-"))
+                )} ${!username.trim() || username === "@" || username.startsWith("-") || username.endsWith("-") ? `cursor-not-allowed ${defaultButtonTextColor}` : activeButtonTextColor} ${buttonPositionClass}`}
               >
                 {t("next")}
               </button>
